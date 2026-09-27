@@ -340,7 +340,7 @@
 
           <div class="form-card reveal">
             <h3 data-i18n="form.title">Request a J cake</h3>
-            <p data-i18n="form.intro">Tell us what you’re celebrating and we’ll call to confirm.</p>
+            <p data-i18n="form.intro">Fill this in and we’ll open WhatsApp with your request ready to send.</p>
             <form id="preorder-form" novalidate>
               <div class="form-grid">
                 <div class="field">
@@ -384,11 +384,11 @@
                 </div>
               </div>
               <div class="form-footer">
-                <button class="btn btn--primary" id="form-submit" type="submit"><span data-i18n="form.submit">Send request</span></button>
+                <button class="btn btn--primary" id="form-submit" type="submit"><span data-i18n="form.submit">Send via WhatsApp</span></button>
               </div>
               <p class="form-status" id="form-status" role="status" hidden>
                 <svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>
-                <span data-i18n="form.success">Thank you! Your request was received.</span>
+                <span><span data-i18n="form.success">WhatsApp opened with your request.</span> <a id="wa-fallback" href="#" target="_blank" rel="noopener" hidden data-i18n="form.waFallback">WhatsApp didn’t open? Tap here.</a></span>
               </p>
             </form>
           </div>

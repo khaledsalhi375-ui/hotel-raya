@@ -7,6 +7,8 @@
   "use strict";
 
   // Hours from the @jasper.doha Instagram bio.
+  var WHATSAPP = "97470810856"; // cake pre-orders, from the Instagram bio
+
   var BRANCHES = [
     { id: "moq", open: 7, close: 24 },   // Mall of Qatar 7AM – 12AM
     { id: "pearl", open: 8, close: 24 }  // UDC Oyster 8AM – 12AM
@@ -155,7 +157,7 @@
       "order.deliveryTitle": "Delivered to your door",
       "order.deliveryText": "Order Jasper through Talabat or Snoonu anywhere in Doha.",
       "form.title": "Request a J cake",
-      "form.intro": "Tell us what you’re celebrating and we’ll call to confirm.",
+      "form.intro": "Fill this in and we’ll open WhatsApp with your request ready to send.",
       "form.name": "Full name",
       "form.phone": "Phone number",
       "form.phoneHint": "Qatar mobile, e.g. +974 5555 1234",
@@ -170,9 +172,16 @@
       "form.cake4": "Dulce de Leche",
       "form.notes": "Message on the cake / notes",
       "form.notesHint": "Optional",
-      "form.submit": "Send request",
-      "form.sending": "Sending…",
-      "form.success": "Thank you! Your request was received (demo only, nothing was sent). We’ll call you to confirm.",
+      "form.submit": "Send via WhatsApp",
+      "form.success": "WhatsApp opened with your request. Just press send and we’ll confirm.",
+      "form.waFallback": "WhatsApp didn’t open? Tap here.",
+      "wa.greeting": "Hi Jasper! I’d like to pre-order a J cake.",
+      "wa.name": "Name",
+      "wa.phone": "Phone",
+      "wa.date": "Pickup date",
+      "wa.branch": "Branch",
+      "wa.cake": "Cake",
+      "wa.notes": "Notes",
       "err.name": "Please enter your name.",
       "err.phone": "Enter a valid Qatar phone number, e.g. +974 5555 1234.",
       "err.date": "Choose a date at least 2 days from today.",
@@ -331,7 +340,7 @@
       "order.deliveryTitle": "توصيل حتى بابك",
       "order.deliveryText": "اطلب جاسبر عبر طلبات أو سنونو في أي مكان في الدوحة.",
       "form.title": "اطلب كيكة J",
-      "form.intro": "أخبرنا بمناسبتك وسنتصل بك للتأكيد.",
+      "form.intro": "املأ النموذج وسنفتح واتساب مع طلبك جاهزاً للإرسال.",
       "form.name": "الاسم الكامل",
       "form.phone": "رقم الهاتف",
       "form.phoneHint": "رقم جوال قطري، مثل ‎+974 5555 1234",
@@ -346,9 +355,16 @@
       "form.cake4": "دولسي دي ليتشي",
       "form.notes": "عبارة على الكيكة / ملاحظات",
       "form.notesHint": "اختياري",
-      "form.submit": "أرسل الطلب",
-      "form.sending": "جارٍ الإرسال…",
-      "form.success": "شكراً لك! تم استلام طلبك (نسخة تجريبية، لم يُرسل شيء). سنتصل بك للتأكيد.",
+      "form.submit": "أرسل عبر واتساب",
+      "form.success": "تم فتح واتساب مع طلبك. اضغط إرسال وسنؤكد لك.",
+      "form.waFallback": "لم يُفتح واتساب؟ اضغط هنا.",
+      "wa.greeting": "مرحباً جاسبر! أود حجز كيكة J.",
+      "wa.name": "الاسم",
+      "wa.phone": "الهاتف",
+      "wa.date": "تاريخ الاستلام",
+      "wa.branch": "الفرع",
+      "wa.cake": "الكيكة",
+      "wa.notes": "ملاحظات",
       "err.name": "يرجى إدخال اسمك.",
       "err.phone": "أدخل رقم هاتف قطري صحيح، مثل ‎+974 5555 1234.",
       "err.date": "اختر تاريخاً بعد يومين على الأقل من اليوم.",
@@ -702,25 +718,26 @@
       Object.keys(rules).forEach(function (name) { if (!check(name) && !firstBad) firstBad = form.elements[name]; });
       if (firstBad) { firstBad.focus(); return; }
 
-      // Demo only: nothing is sent. TODO: connect to WhatsApp (+974 7081 0856) or a form endpoint.
-      submit.disabled = true;
-      var label = submit.querySelector("[data-i18n]");
-      label.setAttribute("data-i18n", "form.sending");
-      label.textContent = t("form.sending");
-      var spin = document.createElement("span");
-      spin.className = "spinner";
-      spin.setAttribute("aria-hidden", "true");
-      submit.prepend(spin);
-
-      setTimeout(function () {
-        spin.remove();
-        submit.disabled = false;
-        label.setAttribute("data-i18n", "form.submit");
-        label.textContent = t("form.submit");
-        form.reset();
-        Object.keys(rules).forEach(function (n) { form.elements[n].removeAttribute("aria-invalid"); });
-        status.hidden = false;
-      }, 1100);
+      // Hand the request to WhatsApp with a pre-filled message; the guest just presses send.
+      // TODO: confirm +974 7081 0856 is on WhatsApp (it is the cake pre-order number from the Instagram bio).
+      var f = form.elements;
+      var lines = [
+        t("wa.greeting"),
+        "",
+        t("wa.name") + ": " + f.name.value.trim(),
+        t("wa.phone") + ": " + f.phone.value.trim(),
+        t("wa.date") + ": " + f.date.value,
+        t("wa.branch") + ": " + f.branch.selectedOptions[0].textContent,
+        t("wa.cake") + ": " + f.cake.selectedOptions[0].textContent
+      ];
+      if (f.notes.value.trim()) lines.push(t("wa.notes") + ": " + f.notes.value.trim());
+      var url = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(lines.join("\n"));
+      var win = window.open(url, "_blank");
+      if (win) win.opener = null;
+      var link = document.getElementById("wa-fallback");
+      link.href = url;
+      link.hidden = !!win;
+      status.hidden = false;
     });
   }
 
