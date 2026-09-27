@@ -1,69 +1,76 @@
-/* Jasper Café — demo site behaviour
+/* Jasper — demo site behaviour
    - EN/AR translations (static text via [data-i18n], menu rendered from data)
    - Open-now status in Asia/Qatar time
-   - Accessible menu tabs, mobile nav, pre-order form validation, scroll reveals */
+   - Accessible menu tabs, mobile nav, ticker pause, cake form validation, scroll reveals */
 
 (function () {
   "use strict";
 
-  // TODO: replace every placeholder below with the café's real details.
+  // Hours from the @jasper.doha Instagram bio.
   var BRANCHES = [
-    { id: "moq", open: 7, close: 24 },   // Mall of Qatar — 7 AM to 12 AM [verify]
-    { id: "pearl", open: 8, close: 24 }  // The Pearl, UDC – The Oyster — 8 AM to 12 AM [verify]
+    { id: "moq", open: 7, close: 24 },   // Mall of Qatar 7AM – 12AM
+    { id: "pearl", open: 8, close: 24 }  // UDC Oyster 8AM – 12AM
   ];
 
-  var IMG = function (id, w) {
-    return "https://images.unsplash.com/photo-" + id + "?auto=format&fit=crop&w=" + (w || 640) + "&q=70";
-  };
-
-  // TODO: prices are indicative placeholders (QAR). Photos are Unsplash stand-ins.
+  // Item names come from Jasper's Instagram posts and delivery listings.
+  // TODO: prices are indicative placeholders (QAR); confirm with the owner.
   var MENU = {
     signatures: [
-      { key: "dream", price: 32, img: "1461023058943-07fcbe16d735", tag: true },
-      { key: "icedLatte", price: 24, img: "1517701604599-bb29b565090c" },
-      { key: "matcha", price: 26, img: "1515823064-d6e0c04616a7" },
-      { key: "karkade", price: 18, img: "1556679343-c7306c1976bc" }
+      { key: "dream", price: 32, img: "cold-brew", tag: true },
+      { key: "smoothies", price: 28, img: "smoothies" },
+      { key: "icedLatte", price: 24, img: "iced-car" },
+      { key: "matcha", price: 26, img: "approved-spread" }
     ],
     coffee: [
-      { key: "espresso", price: 14, img: "1510591509098-f4fdc6d0ff04" },
-      { key: "americano", price: 16, img: "1551030173-122aabc4489c" },
-      { key: "flatWhite", price: 22, img: "1577968897966-3d4325b36b61" },
-      { key: "cappuccino", price: 22, img: "1572442388796-11668a67e53d" },
-      { key: "spanish", price: 25, img: "1541167760496-1628856ab772" },
-      { key: "v60", price: 28, img: "1495474472287-4d71bcdd2085" }
+      { key: "flatWhite", price: 22, img: "latte-art" },
+      { key: "spanish", price: 25, img: "iced-porsche" },
+      { key: "coldBrew", price: 24, img: "cold-brew" },
+      { key: "latte", price: 22, img: "lunch-spread" }
     ],
-    breakfast: [
-      { key: "benedict", price: 48, img: "1525351484163-7529414344d8", tag: true },
-      { key: "feta", price: 38, img: "1528735602780-2552fd46c7af" },
-      { key: "frenchToast", price: 42, img: "1484723091739-30a097e8f929" }
+    food: [
+      { key: "caesar", price: 42, img: "sandwich-tray", tag: true },
+      { key: "dailyToss", price: 45, img: "daily-toss" },
+      { key: "sandwichSel", price: 38, img: "sandwiches" },
+      { key: "wraps", price: 36, img: "wraps-porsche" },
+      { key: "bowl", price: 32, img: "bowl-porsche" }
     ],
-    sweets: [
-      { key: "tiramisu", price: 34, img: "1571877227200-a0d98ea607e9" },
-      { key: "banoffee", price: 36, img: "1488477181946-6428a0291777" },
-      { key: "shortcake", price: 34, img: "1565958011703-44f9829ba187" },
-      { key: "dulce", price: 32, img: "1551024601-bec78aea704b" }
+    bakery: [
+      { key: "croissant", price: 16, img: "freshly-baked" },
+      { key: "chocCroissant", price: 22, img: "choc-croissant", tag: true },
+      { key: "pastries", price: 18, img: "croissant-tray" },
+      { key: "trayBakes", price: 20, img: "pastry-tray" }
     ]
   };
 
   var T = {
     en: {
-      "meta.title": "Jasper Café — Specialty Coffee in Doha | Mall of Qatar & The Pearl",
-      "meta.desc": "Specialty coffee, fresh bakes and light bites at Jasper Café, Mall of Qatar and The Pearl (UDC – The Oyster), Doha.",
+      "meta.title": "Jasper — Specialty Coffee in Doha | Mall of Qatar & UDC Oyster, The Pearl",
+      "meta.desc": "Another day — same perfect coffee. Specialty coffee, fresh bakes, sandwiches and J cakes at Jasper, Mall of Qatar and UDC Oyster, The Pearl, Doha.",
       skip: "Skip to main content",
       "nav.label": "Main",
       "nav.menu": "Menu",
-      "nav.branches": "Branches",
+      "nav.branches": "Locations",
+      "nav.drops": "Drops",
       "nav.about": "About",
-      "nav.order": "Order",
+      "nav.order": "J Cakes",
       "nav.toggle": "Open menu",
       "nav.toggleClose": "Close menu",
       "lang.switch": "Switch to Arabic",
       "cta.order": "Order now",
       "hero.eyebrow": "Specialty coffee · Doha",
-      "hero.title": "Fresh bakes, specialty coffee & a view that speaks for itself.",
-      "hero.lede": "Two homes in Doha: Mall of Qatar and the waterfront at The Pearl. Come for the Jasper Dream, stay for the skyline.",
+      "hero.title": "Another day — same perfect coffee.",
+      "hero.lede": "Specialty coffee, freshly baked pastries, loaded sandwiches and J cakes. Now at Mall of Qatar and UDC Oyster, The Pearl.",
       "hero.cta1": "View menu",
       "hero.cta2": "Find us",
+      "ticker.label": "Highlights",
+      "ticker.pause": "Pause scrolling text",
+      "ticker.play": "Play scrolling text",
+      "ticker.1": "Freshly baked",
+      "ticker.2": "Specialty coffee",
+      "ticker.3": "Summer smoothies",
+      "ticker.4": "J cakes",
+      "ticker.5": "Limited drops",
+      "ticker.6": "The daily toss",
       "status.openUntil": "Open now · {branch} until {time}",
       "status.closedOpens": "Closed now · Opens {time} at {branch}",
       "status.open": "Open now · until {time}",
@@ -72,67 +79,83 @@
       "sig.title": "Meet the Jasper Dream",
       "sig.quote": "“A magical concoction that will transport your senses — a unique and unforgettable coffee experience, crafted exclusively at Jasper.”",
       "sig.badge": "Signature",
-      "sig.alsoTitle": "Also loved",
+      "sig.alt": "Cold brew poured over ice in a ribbed glass",
       "sig.cta": "See the full menu",
-      "menu.eyebrow": "Our menu",
-      "menu.title": "Crafted in-house, all day",
-      "menu.lede": "Specialty coffee, bright signatures, breakfast plates and a counter full of bakes. Halal certified.",
+      "menu.eyebrow": "The menu",
+      "menu.title": "Made fresh, all day",
+      "menu.lede": "Coffee, smoothies, loaded sandwiches, salads and a counter full of bakes. Halal certified.",
       "menu.tabs": "Menu categories",
       "menu.signatures": "Signatures",
       "menu.coffee": "Coffee",
-      "menu.breakfast": "Breakfast",
-      "menu.sweets": "Sweets",
-      "menu.note": "Prices are indicative and shown in Qatari riyals. Ask our baristas about today’s seasonal specials.",
-      "menu.popular": "Guest favourite",
+      "menu.food": "Food",
+      "menu.bakery": "Bakery",
+      "menu.note": "Prices are indicative and shown in Qatari riyals. Ask the crew about this week’s drops.",
+      "menu.popular": "Fan favourite",
       currency: "QAR {n}",
       "br.eyebrow": "Visit us",
-      "br.title": "Two branches, one Jasper",
-      "br.lede": "Open every day from morning until midnight.",
+      "br.title": "Two spots, one Jasper",
+      "br.lede": "Open every day, from morning until midnight.",
       "br.moq.name": "Mall of Qatar",
       "br.moq.address": "Mall of Qatar, Al Rayyan, Doha",
-      "br.moq.hours": "Daily · 7:00 AM – 12:00 AM",
-      "br.moq.chip1": "Inside the mall",
-      "br.moq.chip2": "Family friendly",
-      "br.moq.alt": "Bright café counter with pastries and coffee cups",
-      "br.pearl.name": "The Pearl · UDC – The Oyster",
+      "br.moq.hours": "Daily · 7 AM – 12 AM",
+      "br.moq.chip1": "Early opening",
+      "br.moq.chip2": "Inside the mall",
+      "br.moq.alt": "Jasper's silver ghost mascot outside the Mall of Qatar entrance",
+      "br.pearl.name": "UDC Oyster · The Pearl",
       "br.pearl.address": "The Oyster, UDC, The Pearl-Qatar, Doha",
-      "br.pearl.hours": "Daily · 8:00 AM – 12:00 AM",
-      "br.pearl.chip1": "Waterfront views",
-      "br.pearl.chip2": "Skyline terrace",
+      "br.pearl.hours": "Daily · 8 AM – 12 AM",
+      "br.pearl.chip1": "Waterfront",
+      "br.pearl.chip2": "Skyline views",
       "br.pearl.chip3": "Valet parking",
-      "br.pearl.alt": "Café terrace by the water at golden hour",
+      "br.pearl.alt": "Jet ski on the water in front of the Doha skyline",
       "br.directions": "Get directions",
-      "br.call": "Call",
+      "br.allLocations": "All locations",
       "br.addressLabel": "Address",
       "br.hoursLabel": "Opening hours",
+      "drops.eyebrow": "Jasper goods",
+      "drops.title": "Limited drops",
+      "drops.lede": "Bags, tags and tees in Jasper blue. Released in small batches, in-store only, gone when they’re gone.",
+      "drops.item1": "Weekender duffel",
+      "drops.item2": "Ghost luggage tags",
+      "drops.item3": "Coffee Club tees",
+      "drops.alt1": "Navy Jasper duffel bag with embroidered patches",
+      "drops.alt2": "Three navy luggage tags with the Jasper ghost",
+      "drops.alt3": "Friends in Jasper Coffee Club tees with iced drinks by the water",
+      "about.year": "Year — and more to go",
       "about.eyebrow": "Our story",
-      "about.title": "A modern café with a warm heart",
-      "about.p1": "Jasper started with a simple idea: coffee worth crossing the city for, served somewhere you want to stay. Every signature is developed in-house, every bake comes out of the oven daily, and every cup is made with care.",
-      "about.p2": "From early-morning flat whites at Mall of Qatar to sunset iced lattes on the water at The Pearl, Jasper is where Doha slows down.",
-      "about.cat": "Keep an eye out for our resident cat. She has strong opinions about which table has the best view.",
-      "about.alt1": "Barista pouring latte art",
-      "about.alt2": "Freshly baked pastries on a counter",
+      "about.title": "Made in Doha, served in blue",
+      "about.p1": "Jasper started with one promise: another day, the same perfect coffee. Every pastry is baked fresh, every sandwich is built to order, and every cup is poured by a crew that loves what they do.",
+      "about.p2": "One year in, we’ve grown from Mall of Qatar to the waterfront at UDC Oyster, with summer drops, smoothies and J cakes along the way.",
+      "about.ghost": "Spot the silver ghost. Our mascot turns up everywhere from Mall of Qatar to the passenger seat.",
+      "about.alt1": "The Jasper crew in blue aprons and caps celebrating one year",
+      "about.alt2": "The silver ghost mascot sitting in a car with a Jasper iced coffee",
       "rev.eyebrow": "Guests say",
       "rev.title": "Loved across Doha",
       "rev.1": "“The iced latte is honestly one of the best I’ve had in Doha, and the Rusk Benedict is a must.”",
-      "rev.1by": "Sara M. · The Pearl",
-      "rev.2": "“Beautiful view of the skyline, perfect coffee and the atmosphere is just different. Our new weekend spot.”",
-      "rev.2by": "Ahmed K. · The Pearl",
-      "rev.3": "“Jasper Dream lives up to the name. Great place to meet friends after shopping at Mall of Qatar.”",
+      "rev.1by": "Sara M. · UDC Oyster",
+      "rev.2": "“Perfect coffee, a view of the skyline and an atmosphere that feels different. Our new weekend spot.”",
+      "rev.2by": "Ahmed K. · UDC Oyster",
+      "rev.3": "“The chicken caesar sandwich is huge and the double chocolate croissant is dangerous. Great stop after Mall of Qatar.”",
       "rev.3by": "Noor A. · Mall of Qatar",
       "rev.sample": "Sample reviews for demo purposes.",
       "rev.stars": "Rated 5 out of 5",
-      "ig.title": "@jasper.doha",
+      "ig.followers": "9.7K followers on Instagram",
       "ig.follow": "Follow on Instagram",
-      "ig.alt": "Jasper Café Instagram photo",
+      "ig.alt1": "Jasper smoothies lined up on a white car",
+      "ig.alt2": "Stack of double chocolate croissants",
+      "ig.alt3": "Iced latte resting on a white sports car",
+      "ig.alt4": "J's chicken salad, The Daily Toss",
+      "ig.alt5": "Sandwiches in Jasper wrappers",
+      "ig.alt6": "Table spread of sandwiches, salads and drinks with a Jasper Approved stamp",
       "order.eyebrow": "Order & celebrate",
-      "order.title": "Jasper, wherever you are",
-      "order.lede": "Get your favourites delivered, or pre-order a whole cake for your next celebration.",
+      "order.title": "J cakes & delivery",
+      "order.lede": "Pre-order a whole J cake for your next celebration, or get your Jasper favourites delivered.",
+      "order.cakesTitle": "Cake pre-orders",
+      "order.cakesText": "Call or message us to reserve your J cake.",
       "order.deliveryTitle": "Delivered to your door",
-      "order.deliveryText": "Order Jasper favourites through Talabat or Snoonu anywhere in Doha.",
-      "form.title": "Pre-order a cake",
-      "form.intro": "Tell us what you’re celebrating and we’ll confirm by phone within a day.",
-      "form.required": "Required",
+      "order.deliveryText": "Order Jasper through Talabat or Snoonu anywhere in Doha.",
+      "form.title": "Request a J cake",
+      "form.intro": "Tell us what you’re celebrating and we’ll call to confirm.",
       "form.name": "Full name",
       "form.phone": "Phone number",
       "form.phoneHint": "Qatar mobile, e.g. +974 5555 1234",
@@ -147,72 +170,83 @@
       "form.cake4": "Dulce de Leche",
       "form.notes": "Message on the cake / notes",
       "form.notesHint": "Optional",
-      "form.submit": "Send pre-order request",
+      "form.submit": "Send request",
       "form.sending": "Sending…",
       "form.success": "Thank you! Your request was received (demo only, nothing was sent). We’ll call you to confirm.",
       "err.name": "Please enter your name.",
       "err.phone": "Enter a valid Qatar phone number, e.g. +974 5555 1234.",
       "err.date": "Choose a date at least 2 days from today.",
       "err.cake": "Please choose a cake.",
-      "footer.tagline": "Specialty coffee, fresh bakes and light bites in Doha.",
+      "footer.tagline": "Another day — same perfect coffee.",
+      "footer.call": "Call Jasper",
       "footer.visit": "Visit",
       "footer.explore": "Explore",
-      "footer.follow": "Follow",
-      "footer.rights": "© {y} Jasper Café. All rights reserved.",
+      "footer.cakes": "J cakes",
+      "footer.rights": "© {y} Jasper. All rights reserved.",
       "footer.demo": "Demo website — content subject to confirmation.",
       "items.dream.name": "Jasper Dream",
-      "items.dream.desc": "Our secret signature. Layered, creamy and crafted exclusively at Jasper.",
+      "items.dream.desc": "Our secret signature, crafted exclusively at Jasper.",
+      "items.smoothies.name": "Summer Smoothies",
+      "items.smoothies.desc": "Seasonal fruit blends from the Jasper summer drop.",
       "items.icedLatte.name": "Iced Latte",
-      "items.icedLatte.desc": "Double shot of specialty espresso over cold milk and ice.",
+      "items.icedLatte.desc": "Double shot over cold milk and ice, in the blue-logo cup.",
       "items.matcha.name": "Matcha Latte",
-      "items.matcha.desc": "Ceremonial-grade matcha whisked with your choice of milk.",
-      "items.karkade.name": "Karkade",
-      "items.karkade.desc": "Chilled hibiscus infusion, bright and refreshing.",
-      "items.espresso.name": "Espresso",
-      "items.espresso.desc": "Single-origin, pulled short and sweet.",
-      "items.americano.name": "Americano",
-      "items.americano.desc": "Espresso lengthened with hot water. Hot or iced.",
+      "items.matcha.desc": "Whisked matcha with your choice of milk. Hot or iced.",
       "items.flatWhite.name": "Flat White",
       "items.flatWhite.desc": "Velvety microfoam over a double ristretto.",
-      "items.cappuccino.name": "Cappuccino",
-      "items.cappuccino.desc": "Classic balance of espresso, milk and foam.",
       "items.spanish.name": "Spanish Latte",
-      "items.spanish.desc": "Espresso with condensed milk for a smooth, sweet finish.",
-      "items.v60.name": "V60 Pour-over",
-      "items.v60.desc": "Hand-brewed filter coffee. Ask about today’s beans.",
-      "items.benedict.name": "Rusk Benedict",
-      "items.benedict.desc": "Poached eggs and hollandaise on toasted rusk, with hash browns.",
-      "items.feta.name": "Feta Cheese Sandwich",
-      "items.feta.desc": "Creamy feta, tomato, cucumber and herbs on fresh bread.",
-      "items.frenchToast.name": "French Toast Bread",
-      "items.frenchToast.desc": "Thick-cut brioche, caramelised and served with berries.",
-      "items.tiramisu.name": "Tiramisu Loaf",
-      "items.tiramisu.desc": "Espresso-soaked sponge and mascarpone in a sliceable loaf.",
-      "items.banoffee.name": "Banoffee Montage",
-      "items.banoffee.desc": "Banana, toffee and cream layered on a biscuit base.",
-      "items.shortcake.name": "Strawberry Shortcake",
-      "items.shortcake.desc": "Light sponge, fresh strawberries and whipped cream.",
-      "items.dulce.name": "Dulce de Leche Cake",
-      "items.dulce.desc": "Soft layers with slow-cooked caramel cream."
+      "items.spanish.desc": "Espresso with condensed milk, smooth and sweet.",
+      "items.coldBrew.name": "Cold Brew",
+      "items.coldBrew.desc": "Slow-steeped and poured over ice.",
+      "items.latte.name": "Latte",
+      "items.latte.desc": "Classic espresso and steamed milk.",
+      "items.caesar.name": "Chicken Caesar Sandwich",
+      "items.caesar.desc": "Jasper’s loaded caesar on toasted bread.",
+      "items.dailyToss.name": "J’s Chicken Salad",
+      "items.dailyToss.desc": "The Daily Toss: grilled chicken over fresh greens.",
+      "items.sandwichSel.name": "Sandwich Selection",
+      "items.sandwichSel.desc": "Toasted, stacked and pressed. Ask what’s on today.",
+      "items.wraps.name": "Jasper Wraps",
+      "items.wraps.desc": "Grab-and-go favourites in the Jasper wrapper.",
+      "items.bowl.name": "Yogurt & Granola Bowl",
+      "items.bowl.desc": "Creamy yogurt, granola and fresh berries.",
+      "items.croissant.name": "Butter Croissant",
+      "items.croissant.desc": "Freshly baked every morning.",
+      "items.chocCroissant.name": "Double Chocolate Croissant",
+      "items.chocCroissant.desc": "Chocolate dough, chocolate filling, chocolate drizzle.",
+      "items.pastries.name": "Sweet Buns",
+      "items.pastries.desc": "Filled brioche and cruffins from the morning bake.",
+      "items.trayBakes.name": "Savoury Pastries",
+      "items.trayBakes.desc": "Cheese-topped bakes, fresh from the tray."
     },
     ar: {
-      "meta.title": "جاسبر كافيه — قهوة مختصة في الدوحة | مول قطر واللؤلؤة",
-      "meta.desc": "قهوة مختصة ومخبوزات طازجة ووجبات خفيفة في جاسبر كافيه، مول قطر واللؤلؤة (UDC – الأويستر)، الدوحة.",
+      "meta.title": "جاسبر — قهوة مختصة في الدوحة | مول قطر و UDC أويستر، اللؤلؤة",
+      "meta.desc": "يوم جديد — نفس القهوة المثالية. قهوة مختصة ومخبوزات طازجة وساندويتشات وكيكات J في جاسبر، مول قطر و UDC أويستر، اللؤلؤة.",
       skip: "انتقل إلى المحتوى الرئيسي",
       "nav.label": "القائمة الرئيسية",
       "nav.menu": "المنيو",
       "nav.branches": "الفروع",
+      "nav.drops": "الإصدارات",
       "nav.about": "من نحن",
-      "nav.order": "اطلب",
+      "nav.order": "كيكات J",
       "nav.toggle": "افتح القائمة",
       "nav.toggleClose": "أغلق القائمة",
       "lang.switch": "التبديل إلى الإنجليزية",
       "cta.order": "اطلب الآن",
       "hero.eyebrow": "قهوة مختصة · الدوحة",
-      "hero.title": "مخبوزات طازجة، قهوة مختصة، وإطلالة تتحدث عن نفسها.",
-      "hero.lede": "فرعان في الدوحة: مول قطر والواجهة البحرية في اللؤلؤة. تعال من أجل جاسبر دريم، وابقَ من أجل الإطلالة.",
+      "hero.title": "يوم جديد — نفس القهوة المثالية.",
+      "hero.lede": "قهوة مختصة، مخبوزات طازجة، ساندويتشات غنية وكيكات J. الآن في مول قطر و UDC أويستر، اللؤلؤة.",
       "hero.cta1": "تصفّح المنيو",
       "hero.cta2": "موقعنا",
+      "ticker.label": "أبرز ما لدينا",
+      "ticker.pause": "إيقاف النص المتحرك",
+      "ticker.play": "تشغيل النص المتحرك",
+      "ticker.1": "مخبوز طازجاً",
+      "ticker.2": "قهوة مختصة",
+      "ticker.3": "سموذي الصيف",
+      "ticker.4": "كيكات J",
+      "ticker.5": "إصدارات محدودة",
+      "ticker.6": "سلطة اليوم",
       "status.openUntil": "مفتوح الآن · {branch} حتى {time}",
       "status.closedOpens": "مغلق الآن · يفتح {time} في {branch}",
       "status.open": "مفتوح الآن · حتى {time}",
@@ -220,68 +254,84 @@
       "sig.eyebrow": "حصرياً في جاسبر",
       "sig.title": "تعرّف على جاسبر دريم",
       "sig.quote": "«مزيج ساحر سيأخذ حواسك في رحلة — تجربة قهوة فريدة لا تُنسى، مُحضّرة حصرياً في جاسبر.»",
-      "sig.badge": "مشروبنا المميز",
-      "sig.alsoTitle": "مفضّلات أخرى",
+      "sig.badge": "مميز",
+      "sig.alt": "كولد برو يُسكب على الثلج في كوب زجاجي",
       "sig.cta": "شاهد المنيو كاملاً",
       "menu.eyebrow": "المنيو",
-      "menu.title": "يُحضّر لدينا، طوال اليوم",
-      "menu.lede": "قهوة مختصة، مشروبات مميزة، أطباق فطور، ومخبوزات طازجة. حلال معتمد.",
+      "menu.title": "طازج طوال اليوم",
+      "menu.lede": "قهوة، سموذي، ساندويتشات غنية، سلطات ومخبوزات طازجة. حلال معتمد.",
       "menu.tabs": "أقسام المنيو",
       "menu.signatures": "المميزة",
       "menu.coffee": "القهوة",
-      "menu.breakfast": "الفطور",
-      "menu.sweets": "الحلويات",
-      "menu.note": "الأسعار تقريبية بالريال القطري. اسأل الباريستا عن عروض اليوم الموسمية.",
-      "menu.popular": "المفضّل لدى الضيوف",
+      "menu.food": "الطعام",
+      "menu.bakery": "المخبوزات",
+      "menu.note": "الأسعار تقريبية بالريال القطري. اسأل الفريق عن إصدارات هذا الأسبوع.",
+      "menu.popular": "الأكثر طلباً",
       currency: "{n} ر.ق",
       "br.eyebrow": "زورونا",
       "br.title": "فرعان، وجاسبر واحد",
       "br.lede": "مفتوح يومياً من الصباح حتى منتصف الليل.",
       "br.moq.name": "مول قطر",
       "br.moq.address": "مول قطر، الريان، الدوحة",
-      "br.moq.hours": "يومياً · 7:00 ص – 12:00 منتصف الليل",
-      "br.moq.chip1": "داخل المول",
-      "br.moq.chip2": "مناسب للعائلات",
-      "br.moq.alt": "كاونتر مقهى مشرق مع مخبوزات وأكواب قهوة",
-      "br.pearl.name": "اللؤلؤة · UDC – الأويستر",
+      "br.moq.hours": "يومياً · 7 ص – 12 منتصف الليل",
+      "br.moq.chip1": "يفتح مبكراً",
+      "br.moq.chip2": "داخل المول",
+      "br.moq.alt": "شبح جاسبر الفضي أمام مدخل مول قطر",
+      "br.pearl.name": "UDC أويستر · اللؤلؤة",
       "br.pearl.address": "الأويستر، UDC، اللؤلؤة-قطر، الدوحة",
-      "br.pearl.hours": "يومياً · 8:00 ص – 12:00 منتصف الليل",
-      "br.pearl.chip1": "إطلالة بحرية",
-      "br.pearl.chip2": "تراس على الأفق",
+      "br.pearl.hours": "يومياً · 8 ص – 12 منتصف الليل",
+      "br.pearl.chip1": "على الواجهة البحرية",
+      "br.pearl.chip2": "إطلالة على الأبراج",
       "br.pearl.chip3": "خدمة صف السيارات",
-      "br.pearl.alt": "تراس مقهى بجانب البحر وقت الغروب",
+      "br.pearl.alt": "دراجة مائية أمام أبراج الدوحة",
       "br.directions": "الاتجاهات",
-      "br.call": "اتصل",
+      "br.allLocations": "جميع المواقع",
       "br.addressLabel": "العنوان",
       "br.hoursLabel": "ساعات العمل",
+      "drops.eyebrow": "منتجات جاسبر",
+      "drops.title": "إصدارات محدودة",
+      "drops.lede": "حقائب وميداليات وتيشيرتات بلون جاسبر الأزرق. كميات محدودة، في الفروع فقط، وتنفد بسرعة.",
+      "drops.item1": "حقيبة السفر",
+      "drops.item2": "ميداليات الشبح",
+      "drops.item3": "تيشيرتات كوفي كلوب",
+      "drops.alt1": "حقيبة جاسبر كحلية بشعارات مطرزة",
+      "drops.alt2": "ثلاث بطاقات أمتعة كحلية عليها شبح جاسبر",
+      "drops.alt3": "أصدقاء بتيشيرتات جاسبر كوفي كلوب ومشروبات باردة على البحر",
+      "about.year": "سنة — والقادم أكثر",
       "about.eyebrow": "قصتنا",
-      "about.title": "مقهى عصري بقلب دافئ",
-      "about.p1": "بدأ جاسبر بفكرة بسيطة: قهوة تستحق أن تعبر المدينة من أجلها، في مكان تحب أن تبقى فيه. كل مشروب مميز نطوّره بأنفسنا، وكل المخبوزات تخرج من الفرن يومياً، وكل كوب يُحضّر بعناية.",
-      "about.p2": "من فلات وايت الصباح في مول قطر إلى آيس لاتيه الغروب على الماء في اللؤلؤة، جاسبر هو المكان الذي تتمهّل فيه الدوحة.",
-      "about.cat": "انتبه لقطّتنا المقيمة، فلديها رأي واضح في أي طاولة تملك أجمل إطلالة.",
-      "about.alt1": "باريستا يرسم على اللاتيه",
-      "about.alt2": "مخبوزات طازجة على الكاونتر",
+      "about.title": "صُنع في الدوحة، يُقدّم بالأزرق",
+      "about.p1": "بدأ جاسبر بوعد واحد: يوم جديد، ونفس القهوة المثالية. كل المخبوزات طازجة، وكل ساندويتش يُحضّر عند الطلب، وكل كوب يُسكب بيد فريق يحب ما يفعل.",
+      "about.p2": "بعد عام، انتقلنا من مول قطر إلى الواجهة البحرية في UDC أويستر، مع إصدارات الصيف والسموذي وكيكات J.",
+      "about.ghost": "ابحث عن الشبح الفضي. تميمتنا تظهر في كل مكان، من مول قطر إلى مقعد السيارة.",
+      "about.alt1": "فريق جاسبر بمرايل وقبعات زرقاء يحتفل بمرور عام",
+      "about.alt2": "الشبح الفضي في سيارة مع آيس كوفي من جاسبر",
       "rev.eyebrow": "آراء الضيوف",
       "rev.title": "محبوب في كل الدوحة",
       "rev.1": "«الآيس لاتيه من أفضل ما جربت في الدوحة، والرسك بنديكت لا بد منه.»",
-      "rev.1by": "سارة م. · اللؤلؤة",
-      "rev.2": "«إطلالة رائعة على الأبراج، قهوة ممتازة وأجواء مختلفة. مكاننا الجديد في نهاية الأسبوع.»",
-      "rev.2by": "أحمد ك. · اللؤلؤة",
-      "rev.3": "«جاسبر دريم على قدر اسمه. مكان رائع للقاء الأصدقاء بعد التسوق في مول قطر.»",
+      "rev.1by": "سارة م. · UDC أويستر",
+      "rev.2": "«قهوة مثالية، إطلالة على الأبراج وأجواء مختلفة. مكاننا الجديد في نهاية الأسبوع.»",
+      "rev.2by": "أحمد ك. · UDC أويستر",
+      "rev.3": "«ساندويتش سيزر الدجاج ضخم، وكرواسون الشوكولاتة المزدوجة خطير. محطة رائعة بعد مول قطر.»",
       "rev.3by": "نور ع. · مول قطر",
       "rev.sample": "آراء نموذجية لأغراض العرض.",
       "rev.stars": "تقييم 5 من 5",
-      "ig.title": "@jasper.doha",
+      "ig.followers": "9.7 ألف متابع على إنستغرام",
       "ig.follow": "تابعنا على إنستغرام",
-      "ig.alt": "صورة من إنستغرام جاسبر كافيه",
+      "ig.alt1": "سموذي جاسبر مصفوفة على سيارة بيضاء",
+      "ig.alt2": "كرواسون الشوكولاتة المزدوجة",
+      "ig.alt3": "آيس لاتيه على سيارة رياضية بيضاء",
+      "ig.alt4": "سلطة الدجاج من جاسبر",
+      "ig.alt5": "ساندويتشات في أغلفة جاسبر",
+      "ig.alt6": "طاولة ساندويتشات وسلطات ومشروبات مع ختم جاسبر",
       "order.eyebrow": "اطلب واحتفل",
-      "order.title": "جاسبر، أينما كنت",
-      "order.lede": "اطلب مفضّلاتك توصيلاً، أو احجز كيكة كاملة لمناسبتك القادمة.",
+      "order.title": "كيكات J والتوصيل",
+      "order.lede": "احجز كيكة J كاملة لمناسبتك القادمة، أو اطلب مفضّلاتك من جاسبر توصيلاً.",
+      "order.cakesTitle": "حجز الكيك",
+      "order.cakesText": "اتصل بنا أو راسلنا لحجز كيكة J.",
       "order.deliveryTitle": "توصيل حتى بابك",
-      "order.deliveryText": "اطلب من جاسبر عبر طلبات أو سنونو في أي مكان في الدوحة.",
-      "form.title": "احجز كيكة مسبقاً",
-      "form.intro": "أخبرنا بمناسبتك وسنتصل بك للتأكيد خلال يوم.",
-      "form.required": "مطلوب",
+      "order.deliveryText": "اطلب جاسبر عبر طلبات أو سنونو في أي مكان في الدوحة.",
+      "form.title": "اطلب كيكة J",
+      "form.intro": "أخبرنا بمناسبتك وسنتصل بك للتأكيد.",
       "form.name": "الاسم الكامل",
       "form.phone": "رقم الهاتف",
       "form.phoneHint": "رقم جوال قطري، مثل ‎+974 5555 1234",
@@ -296,53 +346,54 @@
       "form.cake4": "دولسي دي ليتشي",
       "form.notes": "عبارة على الكيكة / ملاحظات",
       "form.notesHint": "اختياري",
-      "form.submit": "أرسل طلب الحجز",
+      "form.submit": "أرسل الطلب",
       "form.sending": "جارٍ الإرسال…",
       "form.success": "شكراً لك! تم استلام طلبك (نسخة تجريبية، لم يُرسل شيء). سنتصل بك للتأكيد.",
       "err.name": "يرجى إدخال اسمك.",
       "err.phone": "أدخل رقم هاتف قطري صحيح، مثل ‎+974 5555 1234.",
       "err.date": "اختر تاريخاً بعد يومين على الأقل من اليوم.",
       "err.cake": "يرجى اختيار كيكة.",
-      "footer.tagline": "قهوة مختصة، مخبوزات طازجة ووجبات خفيفة في الدوحة.",
+      "footer.tagline": "يوم جديد — نفس القهوة المثالية.",
+      "footer.call": "اتصل بجاسبر",
       "footer.visit": "زورونا",
       "footer.explore": "استكشف",
-      "footer.follow": "تابعنا",
-      "footer.rights": "© {y} جاسبر كافيه. جميع الحقوق محفوظة.",
+      "footer.cakes": "كيكات J",
+      "footer.rights": "© {y} جاسبر. جميع الحقوق محفوظة.",
       "footer.demo": "موقع تجريبي — المحتوى بانتظار التأكيد.",
       "items.dream.name": "جاسبر دريم",
-      "items.dream.desc": "مشروبنا السري المميز. طبقات كريمية، يُحضّر حصرياً في جاسبر.",
+      "items.dream.desc": "مشروبنا السري المميز، يُحضّر حصرياً في جاسبر.",
+      "items.smoothies.name": "سموذي الصيف",
+      "items.smoothies.desc": "خلطات فواكه موسمية من إصدار الصيف.",
       "items.icedLatte.name": "آيس لاتيه",
-      "items.icedLatte.desc": "شوت مزدوج من الإسبريسو المختص على حليب بارد وثلج.",
+      "items.icedLatte.desc": "شوت مزدوج على حليب بارد وثلج، في كوب الشعار الأزرق.",
       "items.matcha.name": "ماتشا لاتيه",
-      "items.matcha.desc": "ماتشا فاخرة مخفوقة مع الحليب الذي تختاره.",
-      "items.karkade.name": "كركديه",
-      "items.karkade.desc": "منقوع الكركديه البارد، منعش ومميز.",
-      "items.espresso.name": "إسبريسو",
-      "items.espresso.desc": "حبوب أحادية المصدر، قصير وحلو.",
-      "items.americano.name": "أمريكانو",
-      "items.americano.desc": "إسبريسو مع ماء ساخن. حار أو بارد.",
+      "items.matcha.desc": "ماتشا مخفوقة مع الحليب الذي تختاره. حار أو بارد.",
       "items.flatWhite.name": "فلات وايت",
       "items.flatWhite.desc": "رغوة حليب ناعمة فوق ريستريتو مزدوج.",
-      "items.cappuccino.name": "كابتشينو",
-      "items.cappuccino.desc": "توازن كلاسيكي بين الإسبريسو والحليب والرغوة.",
       "items.spanish.name": "سبانيش لاتيه",
-      "items.spanish.desc": "إسبريسو مع الحليب المكثف لمذاق ناعم وحلو.",
-      "items.v60.name": "V60 تقطير",
-      "items.v60.desc": "قهوة مقطّرة يدوياً. اسأل عن حبوب اليوم.",
-      "items.benedict.name": "رسك بنديكت",
-      "items.benedict.desc": "بيض مسلوق وصوص هولنديز على الرسك المحمّص، مع الهاش براون.",
-      "items.feta.name": "ساندويتش جبنة فيتا",
-      "items.feta.desc": "فيتا كريمية مع طماطم وخيار وأعشاب على خبز طازج.",
-      "items.frenchToast.name": "فرنش توست",
-      "items.frenchToast.desc": "بريوش سميك مكرمل يُقدّم مع التوت.",
-      "items.tiramisu.name": "تيراميسو لوف",
-      "items.tiramisu.desc": "إسفنج منقوع بالإسبريسو مع الماسكاربوني.",
-      "items.banoffee.name": "بانوفي مونتاج",
-      "items.banoffee.desc": "موز وتوفي وكريمة على قاعدة بسكويت.",
-      "items.shortcake.name": "كيكة الفراولة",
-      "items.shortcake.desc": "إسفنج خفيف مع فراولة طازجة وكريمة مخفوقة.",
-      "items.dulce.name": "كيكة دولسي دي ليتشي",
-      "items.dulce.desc": "طبقات طرية مع كريمة الكراميل المطبوخ ببطء."
+      "items.spanish.desc": "إسبريسو مع الحليب المكثف، ناعم وحلو.",
+      "items.coldBrew.name": "كولد برو",
+      "items.coldBrew.desc": "منقوع ببطء ويُسكب على الثلج.",
+      "items.latte.name": "لاتيه",
+      "items.latte.desc": "إسبريسو كلاسيكي مع حليب مبخّر.",
+      "items.caesar.name": "ساندويتش سيزر الدجاج",
+      "items.caesar.desc": "سيزر جاسبر الغني على خبز محمّص.",
+      "items.dailyToss.name": "سلطة الدجاج من J",
+      "items.dailyToss.desc": "سلطة اليوم: دجاج مشوي على خضار طازجة.",
+      "items.sandwichSel.name": "تشكيلة الساندويتشات",
+      "items.sandwichSel.desc": "محمّصة ومحشوة ومضغوطة. اسأل عن ساندويتش اليوم.",
+      "items.wraps.name": "لفائف جاسبر",
+      "items.wraps.desc": "مفضّلات سريعة في غلاف جاسبر.",
+      "items.bowl.name": "زبادي وجرانولا",
+      "items.bowl.desc": "زبادي كريمي مع جرانولا وتوت طازج.",
+      "items.croissant.name": "كرواسون بالزبدة",
+      "items.croissant.desc": "مخبوز طازجاً كل صباح.",
+      "items.chocCroissant.name": "كرواسون الشوكولاتة المزدوجة",
+      "items.chocCroissant.desc": "عجينة شوكولاتة، حشوة شوكولاتة، وصوص شوكولاتة.",
+      "items.pastries.name": "مخبوزات حلوة",
+      "items.pastries.desc": "بريوش محشو وكروفن من خبز الصباح.",
+      "items.trayBakes.name": "معجنات مالحة",
+      "items.trayBakes.desc": "معجنات بالجبن طازجة من الفرن."
     }
   };
 
@@ -402,13 +453,14 @@
     if (y) y.textContent = t("footer.rights", { y: new Date().getFullYear() });
 
     syncNavToggleLabel();
+    syncTickerLabel();
     renderMenu();
     renderSignatureList();
     updateStatus();
     store("jasper-lang", lang);
   }
 
-  // ---------- Images: fall back to warm gradient if a photo fails ----------
+  // ---------- Images: fall back to an ice tile if a photo fails ----------
   document.addEventListener("error", function (e) {
     var img = e.target;
     if (img && img.tagName === "IMG" && img.parentElement && img.parentElement.classList.contains("ph")) {
@@ -417,10 +469,9 @@
     }
   }, true);
 
-  function photo(id, alt, w, eager) {
-    return '<div class="ph"><img src="' + IMG(id, w) + '" alt="' + alt.replace(/"/g, "&quot;") +
-      '" width="' + (w || 640) + '" height="' + Math.round((w || 640) * 0.75) + '"' +
-      (eager ? "" : ' loading="lazy"') + ' decoding="async"></div>';
+  function photo(name, alt) {
+    return '<div class="ph"><img src="assets/img/' + name + '.webp" alt="' + alt.replace(/"/g, "&quot;") +
+      '" width="368" height="490" loading="lazy" decoding="async"></div>';
   }
 
   // ---------- Menu ----------
@@ -431,7 +482,7 @@
     grid.innerHTML = MENU[activeTab].map(function (item) {
       var name = t("items." + item.key + ".name");
       return '<li class="menu-card reveal-item">' +
-        photo(item.img, name, 640) +
+        photo(item.img, name) +
         '<div class="menu-card-body">' +
           '<div class="menu-card-top"><h3>' + name + '</h3><span class="price">' + price(item.price) + "</span></div>" +
           "<p>" + t("items." + item.key + ".desc") + "</p>" +
@@ -445,9 +496,8 @@
     var list = document.getElementById("sig-list");
     if (!list) return;
     list.innerHTML = MENU.signatures.slice(1).map(function (item) {
-      var name = t("items." + item.key + ".name");
-      return '<li><div class="mini-thumb">' + photo(item.img, "", 120) + "</div>" +
-        "<div><strong>" + name + "</strong><span>" + t("items." + item.key + ".desc") + "</span></div></li>";
+      return '<li><div class="mini-thumb">' + photo(item.img, "") + "</div>" +
+        "<strong>" + t("items." + item.key + ".name") + "</strong></li>";
     }).join("");
   }
 
@@ -488,6 +538,30 @@
         e.preventDefault();
         select(tabs[(next + tabs.length) % tabs.length], true);
       });
+    });
+  }
+
+  // ---------- Ticker pause (WCAG 2.2.2) ----------
+  var ticker, tickerBtn;
+  function syncTickerLabel() {
+    if (!tickerBtn) return;
+    var paused = tickerBtn.getAttribute("aria-pressed") === "true";
+    tickerBtn.setAttribute("aria-label", t(paused ? "ticker.play" : "ticker.pause"));
+    tickerBtn.querySelector("use").setAttribute("href", paused ? "#i-play" : "#i-pause");
+  }
+  function setupTicker() {
+    ticker = document.getElementById("ticker");
+    tickerBtn = document.getElementById("ticker-pause");
+    if (!ticker || !tickerBtn) return;
+    tickerBtn.addEventListener("click", function () {
+      var paused = tickerBtn.getAttribute("aria-pressed") !== "true";
+      tickerBtn.setAttribute("aria-pressed", paused ? "true" : "false");
+      ticker.classList.toggle("is-paused", paused);
+      syncTickerLabel();
+    });
+    ticker.addEventListener("focusin", function () { ticker.classList.add("is-paused"); });
+    ticker.addEventListener("focusout", function () {
+      if (tickerBtn.getAttribute("aria-pressed") !== "true") ticker.classList.remove("is-paused");
     });
   }
 
@@ -562,7 +636,6 @@
       });
     }, { passive: true });
 
-    // Highlight the section in view
     if ("IntersectionObserver" in window) {
       var links = {};
       nav.querySelectorAll("a[href^='#']").forEach(function (a) { links[a.getAttribute("href").slice(1)] = a; });
@@ -589,7 +662,7 @@
     document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
   }
 
-  // ---------- Pre-order form ----------
+  // ---------- Cake request form ----------
   function setupForm() {
     var form = document.getElementById("preorder-form");
     if (!form) return;
@@ -597,8 +670,7 @@
     var submit = document.getElementById("form-submit");
     var dateInput = form.elements.date;
 
-    var min = new Date(Date.now() + 2 * 864e5);
-    var minStr = min.toISOString().slice(0, 10);
+    var minStr = new Date(Date.now() + 2 * 864e5).toISOString().slice(0, 10);
     dateInput.min = minStr;
 
     var rules = {
@@ -630,11 +702,11 @@
       Object.keys(rules).forEach(function (name) { if (!check(name) && !firstBad) firstBad = form.elements[name]; });
       if (firstBad) { firstBad.focus(); return; }
 
-      // Demo only: nothing is sent. TODO: connect to a real endpoint or WhatsApp.
+      // Demo only: nothing is sent. TODO: connect to WhatsApp (+974 7081 0856) or a form endpoint.
       submit.disabled = true;
       var label = submit.querySelector("[data-i18n]");
-      label.textContent = t("form.sending");
       label.setAttribute("data-i18n", "form.sending");
+      label.textContent = t("form.sending");
       var spin = document.createElement("span");
       spin.className = "spinner";
       spin.setAttribute("aria-hidden", "true");
@@ -656,6 +728,7 @@
   document.addEventListener("DOMContentLoaded", function () {
     setupNav();
     setupTabs();
+    setupTicker();
     setupForm();
     var saved = store("jasper-lang");
     var browserAr = (navigator.language || "").toLowerCase().indexOf("ar") === 0;

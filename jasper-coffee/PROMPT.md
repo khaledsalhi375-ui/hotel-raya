@@ -4,6 +4,12 @@
 > Facts marked **[verify]** came from public posts and delivery listings and could not be
 > confirmed against the café's own pages. Check them with the owner before showing the demo.
 
+> **Update (from the @jasper.doha Instagram profile):** the real brand is **cobalt blue `#123DA0` + white + ice blue `#E3EEF3`**,
+> with a script "jasper" wordmark, wide heavy uppercase headlines, a silver-ghost mascot and limited merch drops.
+> Bio: "Another day — same perfect coffee" · Mall of Qatar 7AM–12AM · UDC Oyster 8AM–12AM · Cake pre-order 7081 0856 ·
+> tinyurl.com/jasperlocation · 9.7K followers. The built site in this folder uses that brand and supersedes the warm-brown
+> palette, fonts and "resident cat" detail below.
+
 ---
 
 ## Role & goal
