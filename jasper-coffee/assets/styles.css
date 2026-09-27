@@ -478,7 +478,7 @@ html[lang="ar"] .badge { letter-spacing: 0; }
 .about-photos .ph:first-child { aspect-ratio: 4 / 5; }
 .about-copy p { color: var(--ink-muted); font-size: 1.0625rem; }
 .year-badge {
-  display: inline-flex;
+  display: flex;
   align-items: baseline;
   gap: 10px;
   font-family: var(--font-display);
