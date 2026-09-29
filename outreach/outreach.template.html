@@ -1,0 +1,215 @@
+<title>Doha Outreach Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one working column. Settings strip on top, then a stack of venue cards, each one a send station. */
+:root {
+  --bg: #f6f3ef;
+  --surface: #ffffff;
+  --fg: #231b1d;
+  --muted: #6d6164;
+  --line: #e4dcd6;
+  --accent: #8a1538;       /* Qatar maroon */
+  --accent-fg: #ffffff;
+  --accent-soft: #f3e3e8;
+  --wa: #128c4a;
+  --wa-soft: #e1f3e8;
+  --warn: #9a5b00;
+  --warn-soft: #fbefd9;
+  --field: #fbf9f7;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171214; --surface: #211a1c; --fg: #f1e9eb; --muted: #ab9ea2; --line: #3a2f32;
+    --accent: #e0708f; --accent-fg: #1c0f13; --accent-soft: #3d2229;
+    --wa: #5fd394; --wa-soft: #173226; --warn: #f1b75c; --warn-soft: #3a2d15; --field: #1b1517;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #171214; --surface: #211a1c; --fg: #f1e9eb; --muted: #ab9ea2; --line: #3a2f32;
+  --accent: #e0708f; --accent-fg: #1c0f13; --accent-soft: #3d2229;
+  --wa: #5fd394; --wa-soft: #173226; --warn: #f1b75c; --warn-soft: #3a2d15; --field: #1b1517;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 16px/1.5 var(--body); padding-inline: 16px; padding-block: 28px 64px; }
+.wrap { max-width: 860px; margin: 0 auto; display: grid; gap: 22px; }
+h1 { font: 700 clamp(28px, 5vw, 40px)/1.05 var(--display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h1 span { color: var(--accent); }
+.lede { color: var(--muted); margin: 6px 0 0; max-width: 62ch; }
+.settings { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+.settings label { display: grid; gap: 4px; font-weight: 600; font-size: 14px; min-width: 0; }
+.settings small { font-weight: 400; color: var(--muted); }
+input[type=text], textarea { width: 100%; font: inherit; color: var(--fg); background: var(--field); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; }
+input[type=text]:focus, textarea:focus, button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.banner { grid-column: 1 / -1; background: var(--warn-soft); color: var(--warn); border-radius: 6px; padding: 8px 12px; font-size: 14px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 600 14px var(--body); border: 1px solid var(--line); background: var(--surface); color: var(--fg); border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+.chip[aria-pressed=true] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.progress { font: 500 13px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.list { display: grid; gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 12px; }
+.card.sent { opacity: .62; }
+.head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: baseline; justify-content: space-between; }
+.head h2 { font: 700 21px/1.2 var(--display); margin: 0; }
+.head h2 .n { font: 500 13px var(--mono); color: var(--muted); margin-right: 6px; }
+.area { color: var(--muted); font-size: 14px; }
+.pill { font: 600 11px var(--body); text-transform: uppercase; letter-spacing: .06em; border-radius: 4px; padding: 2px 7px; }
+.p-High { background: var(--accent-soft); color: var(--accent); }
+.p-Medium, .p-Low { background: var(--field); color: var(--muted); border: 1px solid var(--line); }
+.p-Check { background: var(--warn-soft); color: var(--warn); }
+.note { background: var(--warn-soft); color: var(--warn); border-radius: 6px; padding: 6px 10px; font-size: 14px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { font: 600 14px var(--body); text-decoration: none; border-radius: 6px; padding: 7px 12px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+.btn.wa { background: var(--wa); border-color: var(--wa); color: var(--surface); }
+.btn.ig { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.phone { font: 500 14px var(--mono); user-select: all; background: var(--field); border: 1px dashed var(--line); border-radius: 6px; padding: 6px 10px; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
+.tab { font: 600 14px var(--body); background: none; border: 0; border-bottom: 2px solid transparent; padding: 6px 10px; color: var(--muted); cursor: pointer; }
+.tab[aria-selected=true] { color: var(--fg); border-color: var(--accent); }
+.subject { font-size: 14px; color: var(--muted); }
+.subject b { color: var(--fg); }
+textarea { min-height: 220px; resize: vertical; font-size: 15px; line-height: 1.5; }
+.foot { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.sentbox { display: inline-flex; gap: 6px; align-items: center; font-size: 14px; cursor: pointer; }
+.copied { color: var(--wa); font-size: 13px; }
+@media (max-width: 620px) { .settings { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Doha Outreach <span>Desk</span></h1>
+    <p class="lede">18 recently opened Doha cafés and restaurants with no website. Each card has a message written for that venue and direct links to contact it. WhatsApp links open the chat with the message already typed, so you only check it and tap send. Instagram can't be pre-filled, so copy the message first, then open the DM.</p>
+  </header>
+
+  <section class="settings" aria-label="Your details">
+    <label for="portfolio">Your portfolio link <small>added to every message</small>
+      <input type="text" id="portfolio" placeholder="https://jasper-demo.vercel.app">
+    </label>
+    <label for="mycontact">Your WhatsApp / email <small>used in the email signature</small>
+      <input type="text" id="mycontact" placeholder="+974 5xxx xxxx · you@example.com">
+    </label>
+    <div class="banner" id="warn">Add your portfolio link above before sending. Until then, messages show "[your portfolio link]".</div>
+  </section>
+
+  <div class="toolbar">
+    <div class="chips" role="group" aria-label="Filter venues">
+      <button class="chip" data-f="all" aria-pressed="true">All</button>
+      <button class="chip" data-f="wa" aria-pressed="false">WhatsApp</button>
+      <button class="chip" data-f="ig" aria-pressed="false">Instagram only</button>
+      <button class="chip" data-f="todo" aria-pressed="false">Not sent yet</button>
+    </div>
+    <span class="progress" id="progress"></span>
+  </div>
+
+  <div class="list" id="list"></div>
+</div>
+
+<script>
+const VENUES = /*__DATA__*/[];
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const $ = (s, el = document) => el.querySelector(s);
+const portfolioEl = $('#portfolio'), contactEl = $('#mycontact');
+portfolioEl.value = store.get('portfolio', '');
+contactEl.value = store.get('mycontact', '');
+let sent = store.get('sent', {});
+let filter = 'all';
+const edits = {}; // per-card edited text, kept for this visit only
+
+function fill(t) {
+  return t.replaceAll('{PORTFOLIO}', portfolioEl.value.trim() || '[your portfolio link]')
+          .replaceAll('{MYCONTACT}', contactEl.value.trim() || '[your WhatsApp · email]');
+}
+function esc(s) { return s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+function card(v, i) {
+  const el = document.createElement('article');
+  el.className = 'card' + (sent[v.id] ? ' sent' : '');
+  el.dataset.id = v.id;
+  const pill = v.priority.split(' ')[0];
+  el.innerHTML = `
+    <div class="head">
+      <div><h2><span class="n">${String(i + 1).padStart(2, '0')}</span>${esc(v.name)}</h2><div class="area">${esc(v.area)}</div></div>
+      <span class="pill p-${pill}">${esc(v.priority)}</span>
+    </div>
+    ${v.note ? `<div class="note">${esc(v.note)}</div>` : ''}
+    <div class="actions">
+      ${v.whatsapp ? `<a class="btn wa" data-wa target="_blank" rel="noopener">Open WhatsApp with message</a>` : ''}
+      ${v.instagram ? `<a class="btn ig" href="https://ig.me/m/${v.instagram}" target="_blank" rel="noopener">Instagram DM</a>
+        <a class="btn" href="https://instagram.com/${v.instagram}" target="_blank" rel="noopener">@${esc(v.instagram)}</a>` : ''}
+      ${v.phone ? `<span class="phone" title="${v.whatsapp ? 'Mobile' : 'Landline: call it'}">${esc(v.phone)}</span>` : ''}
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-t="short" aria-selected="true">WhatsApp / DM message</button>
+      <button class="tab" role="tab" data-t="email" aria-selected="false">Email version</button>
+    </div>
+    <div class="subject" hidden>Subject: <b>${esc(v.subject)}</b></div>
+    <textarea id="msg-${v.id}" aria-label="Message for ${esc(v.name)}"></textarea>
+    <div class="foot">
+      <div class="actions"><button class="btn" data-copy>Copy message</button><span class="copied" aria-live="polite"></span></div>
+      <label class="sentbox"><input type="checkbox" id="sent-${v.id}" ${sent[v.id] ? 'checked' : ''}> Mark as sent</label>
+    </div>`;
+  let tab = 'short';
+  const ta = $('textarea', el), wa = $('[data-wa]', el), subj = $('.subject', el);
+  const render = () => {
+    ta.value = edits[v.id + tab] ?? fill(v[tab]);
+    if (wa) wa.href = `https://wa.me/${v.whatsapp}?text=${encodeURIComponent(edits[v.id + 'short'] ?? fill(v.short))}`;
+  };
+  el._render = render;
+  ta.addEventListener('input', () => { edits[v.id + tab] = ta.value; if (tab === 'short') render(); });
+  el.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => {
+    tab = b.dataset.t;
+    el.querySelectorAll('.tab').forEach(x => x.setAttribute('aria-selected', x === b));
+    subj.hidden = tab !== 'email';
+    render();
+  }));
+  $('[data-copy]', el).addEventListener('click', () => {
+    const text = (tab === 'email' ? `Subject: ${v.subject}\n\n` : '') + ta.value;
+    const done = m => { const s = $('.copied', el); s.textContent = m; setTimeout(() => s.textContent = '', 2500); };
+    navigator.clipboard.writeText(text).then(() => done('Copied'), () => { ta.select(); done('Selected. Press Ctrl/Cmd+C'); });
+  });
+  $('input[type=checkbox]', el).addEventListener('change', e => {
+    sent[v.id] = e.target.checked; store.set('sent', sent);
+    el.classList.toggle('sent', e.target.checked); progress(); applyFilter();
+  });
+  render();
+  return el;
+}
+
+const list = $('#list');
+VENUES.forEach((v, i) => list.appendChild(card(v, i)));
+
+function progress() {
+  const n = VENUES.filter(v => sent[v.id]).length;
+  $('#progress').textContent = `${n} / ${VENUES.length} sent`;
+}
+function applyFilter() {
+  VENUES.forEach(v => {
+    const el = list.querySelector(`[data-id="${v.id}"]`);
+    el.hidden = (filter === 'wa' && !v.whatsapp) || (filter === 'ig' && v.whatsapp) || (filter === 'todo' && sent[v.id]);
+  });
+}
+document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+  filter = c.dataset.f;
+  document.querySelectorAll('.chip').forEach(x => x.setAttribute('aria-pressed', x === c));
+  applyFilter();
+}));
+function refresh() {
+  store.set('portfolio', portfolioEl.value); store.set('mycontact', contactEl.value);
+  $('#warn').hidden = !!portfolioEl.value.trim();
+  list.querySelectorAll('.card').forEach(el => el._render());
+}
+portfolioEl.addEventListener('input', refresh);
+contactEl.addEventListener('input', refresh);
+refresh(); progress();
+</script>
